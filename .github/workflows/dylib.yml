@@ -1,0 +1,17 @@
+name: Build dylib
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: xcrun -sdk iphoneos clang -arch arm64 -dynamiclib -fobjc-arc -framework UIKit -framework Foundation -miphoneos-version-min=16.0 Tweak.m -o MyDylib.dylib
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MyDylib.dylib
+          path: MyDylib.dylib
+          if-no-files-found: error
